@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+.container .content {
+    max-height: 35rem;
+    overflow-y: scroll;
+}
+
+.content__item {
+    line-height: 5px;
+}
