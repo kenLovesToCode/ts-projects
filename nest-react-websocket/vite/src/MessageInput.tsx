@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-const MessageInput = ({ send }: { send: (val: string) => void }) => {
+const MessageInput = ({
+    handleKeyPress,
+}: {
+    handleKeyPress: (e: any, val: any) => any;
+}) => {
     const [value, setValue] = useState('');
 
     return (
@@ -10,8 +14,9 @@ const MessageInput = ({ send }: { send: (val: string) => void }) => {
                 placeholder="message here"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
+                onKeyDown={(e) => handleKeyPress(e, value)}
             />
-            <button onClick={() => send(value)}>send</button>
+            <button onClick={(e) => handleKeyPress(e, value)}>send</button>
         </>
     );
 };

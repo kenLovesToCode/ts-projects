@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import {
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
@@ -7,7 +8,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 
 @WebSocketGateway(8002, { cors: true })
 export class TodosGateway
@@ -15,7 +16,7 @@ export class TodosGateway
 {
   private logger: Logger = new Logger('TodosGateway');
 
-  @WebSocketServer() wss: Server;
+  @WebSocketServer() wss: any;
 
   afterInit(server: any) {
     this.logger.log('Initialized');
@@ -26,12 +27,12 @@ export class TodosGateway
   }
 
   handleDisconnect(client: Socket) {
-    this.logger.log(`Cliet disconneted: ${client.id}`);
+    this.logger.log(`Cliet disconnected: ${client.id}`);
   }
 
   @SubscribeMessage('sendTodo')
-  async handleSendTodo(client: Socket, payload: string): Promise<void> {
-    this.logger.log(`Received todo: ${payload}`);
-    this.wss.emit('receiveTodo: ', payload);
+  handleSendTodo(@MessageBody() payload: string): void {
+    console.log(payload);
+    this.wss.emit('receiveTodo', payload);
   }
 }
