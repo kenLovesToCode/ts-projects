@@ -1,0 +1,14 @@
+version: '3'
+services:
+  todos:
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    ports:
+      - '4000:5099'
+    volumes:
+      - ./service:/usr/src/app
+      - /usr/src/app/node_modules
+    command: 
+      npm run start:dev
+    
