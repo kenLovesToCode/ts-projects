@@ -10,7 +10,7 @@ import {
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 
-@WebSocketGateway(8002, { cors: true })
+@WebSocketGateway({ cors: true })
 export class TodosGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -22,11 +22,11 @@ export class TodosGateway
     this.logger.log('Initialized');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
   }
 
-  handleDisconnect(client: Socket) {
+  async handleDisconnect(client: Socket) {
     this.logger.log(`Cliet disconnected: ${client.id}`);
   }
 

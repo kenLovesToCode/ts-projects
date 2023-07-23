@@ -9,7 +9,7 @@ function App() {
     const inputRef = useRef<any>(null);
 
     const getIntialTodos = () => {
-        fetch('http://localhost:5099/api/todos')
+        fetch('http://localhost:4000/api/todos')
             .then((res: any) => res.json())
             .then((data: any) => {
                 setTodos(data);
@@ -17,12 +17,10 @@ function App() {
     };
 
     const receiveTodo = (newTodo: string) => {
-        console.log('newTOdo ', newTodo);
         setTodos([newTodo, ...todos]);
     };
 
     const sendTodo = () => {
-        console.log('sending todo ', todo);
         socket?.emit('sendTodo', todo);
         setTodo('');
     };
@@ -42,18 +40,16 @@ function App() {
 
     //socket connection
     useEffect(() => {
-        const newSocket = io('http://localhost:8002');
+        const newSocket = io('http://192.168.1.59:6000');
         setSocket(newSocket);
     }, [setSocket]);
 
     //listen todos
     useEffect(() => {
         inputRef.current.focus();
-        // socket?.on('receiveTodo', (todo: string) => {
-        //     console.log('received todo: ', todo);
-        //     receiveTodo(todo);
-        // });
-        socket?.on('receiveTodo', receiveTodo);
+        socket?.on('receiveTodo', (todo: string) => {
+            receiveTodo(todo);
+        });
 
         return () => {
             socket?.off('receiveTodo', receiveTodo);
@@ -61,9 +57,9 @@ function App() {
     }, [receiveTodo]);
 
     //initial todos
-    useEffect(() => {
-        getIntialTodos();
-    }, []);
+    // useEffect(() => {
+    //     getIntialTodos();
+    // }, []);
 
     return (
         <div className="container">
